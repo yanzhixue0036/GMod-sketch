@@ -87,13 +87,13 @@ if __name__ == "__main__":
             g = int(math.log(min(pow(2, args.GMod_gsize), math.exp(args.epsilon)+1)))
             gmod = GMod(dict_dataset, args.GMod_Msize, args.GMod_Wsize, g,args.output,seed,args.epsilon, args.random_response,delete_dataset)
             gmod.build_sketch()
-            result = gmod.estimate_union_IVW()
+            result = gmod.estimate_union_MEC()
             lst_all_results.append(result[0])
             
         if args.method == 'GMOD_MEC' and args.noise == False:
             gmod = GMod(dict_dataset, args.GMod_Msize, args.GMod_Wsize, args.GMod_gsize,args.output,seed,args.epsilon, False,delete_dataset)
             gmod.build_sketch()
-            result = gmod.estimate_union_IVW()
+            result = gmod.estimate_union_MEC()
             lst_all_results.append(result[0])
             
         if args.method == "SFM":

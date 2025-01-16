@@ -219,7 +219,7 @@ class GMod:
         
         
 
-    def IVW_estimate(self, merge_sketch, m0, w, alpha, esti):
+    def MEC_estimate(self, merge_sketch, m0, w, alpha, esti):
         
         n = [0] * w
         var = [0] * w
@@ -289,7 +289,7 @@ class GMod:
 
         return lst_result
     
-    def estimate_cardinality_IVW(self):
+    def estimate_cardinality_MEC(self):
         random.seed(self.seed)
 
         lst_user = list(self.dict_dataset.keys())
@@ -310,11 +310,11 @@ class GMod:
             # estimated_union = self.binary_search_estimator(GMod_sketch_A, self.m_size, self.w_size, self.alpha)
             estimated_union = self.estimate_n(GMod_sketch_A, self.m_size, self.w_size, self.alpha)
 
-            estimated_union_IVW = self.IVW_estimate(GMod_sketch_A, self.m_size, self.w_size, self.alpha,
+            estimated_union_MEC = self.MEC_estimate(GMod_sketch_A, self.m_size, self.w_size, self.alpha,
                                                     estimated_union)
             
                 
-            lst_result.append(estimated_union_IVW)
+            lst_result.append(estimated_union_MEC)
 
         return lst_result
     
@@ -350,7 +350,7 @@ class GMod:
 
         return lst_result
     
-    def estimate_union_IVW(self):
+    def estimate_union_MEC(self):
         random.seed(self.seed)
 
         lst_user = list(self.dict_dataset.keys())
@@ -375,7 +375,7 @@ class GMod:
             
             # estimated_union = self.binary_search_estimator(GMod_sketch_merge, self.m_size, self.w_size, self.alpha)
             estimated_union = self.estimate_n(GMod_sketch_merge, self.m_size, self.w_size, self.alpha)
-            estimated_union_IVW = self.IVW_estimate(GMod_sketch_merge, self.m_size, self.w_size, self.alpha, estimated_union)
+            estimated_union_MEC = self.MEC_estimate(GMod_sketch_merge, self.m_size, self.w_size, self.alpha, estimated_union)
                 
-            lst_result.append(estimated_union_IVW)
+            lst_result.append(estimated_union_MEC)
         return lst_result
