@@ -36,7 +36,6 @@ class GMod:
             
     def __arriveElement(self, item, row, repeattimes, GMod_sketch, add = 1):
         for p in range(repeattimes):
-            # TODO cat down time cost
             temp_hash = mmh3.hash64(str(item), signed=False, seed=self.seed + 1)
             index_j = self.compute_index_value(temp_hash[0])
             

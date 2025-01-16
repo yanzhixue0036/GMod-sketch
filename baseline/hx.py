@@ -172,8 +172,6 @@ class HalfXor(object):
         elif j==w-1:
             return 2**(-w+1)
     
-      
-    # 3.4.2的phi(n)函数，计算置1总数的期望
     def phi_func(self, n):
         lamb=self.lamb
         w=self.w

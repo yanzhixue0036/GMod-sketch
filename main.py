@@ -22,7 +22,7 @@ def get_args():
     parser.add_argument('--ratio', default=0.5, type=float, help='skewness ratio used to control cardinalities of two sets')
     parser.add_argument('--delete_ratio', default=0.0, type=float, help='delete ratio of the sththetic dataset')
     parser.add_argument('--exp_rounds', default=10, type=int, help='the number of experimental rounds') 
-    parser.add_argument('--noise',default=True, type=bool, help='whether add noise')
+    parser.add_argument('--noise',default=False, type=bool, help='whether add noise')
     parser.add_argument('--output', default='result/', type=str, help='output directory')
     parser.add_argument('--epsilon', default=1, type=int, help='privacy budget')
     parser.add_argument('--counter', default=32, type=int, help='counter size')

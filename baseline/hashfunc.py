@@ -10,9 +10,7 @@ def sha1_hash32(data, seed=0):
     Returns:
         int: an integer hash value that can be encoded using 32 bits.
     """
-    # 如果输入是元组，则将其转换为字节
     if isinstance(data, tuple):
-        # 将元组转换为字符串，然后编码为字节
         data = str(data).encode('utf-8')
     
     return struct.unpack('<I', hashlib.sha1(data).digest()[:4])[0]
@@ -26,9 +24,7 @@ def sha1_hash64(data, seed=0):
     Returns:
         int: an integer hash value that can be encoded using 64 bits.
     """
-    # 如果输入是元组，则将其转换为字节
     if isinstance(data, tuple):
-        # 将元组转换为字符串，然后编码为字节
         data = str(data).encode('utf-8')
     return struct.unpack('<Q', hashlib.sha1(data).digest()[:8])[0]
 
