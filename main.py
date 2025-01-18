@@ -15,7 +15,7 @@ from baseline.hx import HalfXor
 from baseline.chll import CHLL
 def get_args():
     parser = argparse.ArgumentParser(description="sketch method for estimating intersection cardinalities")
-    parser.add_argument('--method', default='LL', type=str, help='method name: GMOD/GMOD_MEC/SFM/CL/LL/HX/CHLL')
+    parser.add_argument('--method', default='GMOD', type=str, help='method name: GMOD/GMOD_MEC/SFM/CL/LL/HX/CHLL')
     parser.add_argument('--dataset', default='synthetic', type=str, help='dataset path or synthetic or deteled')
     parser.add_argument('--intersection', default=10000, type=int, help='set intersection cardinality') 
     parser.add_argument('--difference', default=100000, type=int, help='set difference cardinality')

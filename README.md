@@ -75,28 +75,28 @@ pip install -r requirements.txt
 
 ### Example
 
-Use `main.py` to test a method for cardinality is 100000, use GMOD to estimate the intersection cardinality:
+Use `main.py` to test a method for the Single Set Case where cardinality is 100000, use GMOD-MEC to estimate the cardinality:
 ```
-python3 main.py --method GMOD --intersection 100000 --difference 10000 --noise False
+python3 main.py --method GMOD_MEC --intersection 100000 --difference 0 --noise False
 ```
 
 
-In the multiple set case, when the intersection cardinality is 100000 and the difference cardinality is 10000, use GMOD to estimate the intersection cardinality:
+In the Multiple Set Case, when the intersection cardinality is 100000 and the difference cardinality is 10000, use GMOD-MEC to estimate the intersection cardinality:
 
 ```
-python3 main.py --method GMOD --intersection 100000 --difference 10000 --noise True
+python3 main.py --method GMOD_MEC --intersection 100000 --difference 10000 --noise True
 ```
 
 When the intersection cardinality is 100000 and the difference cardinality is 10000 , use GMOD_MEC to estimate the intersection cardinality with a privacy budget of 2:
 
 ```
-python main.py --method GMOD_MEC --intersection 100000 --difference 10000 --epsilon 2
+python main.py --method GMOD_MEC --intersection 100000 --difference 10000 --noise True --epsilon 2
 ```
 
-When the intersection cardinality is 100000, the difference cardinality is 10000, and the delete _ratio is 0.2, use GMOD to estimate the intersection cardinality:
+When the intersection cardinality is 100000, the difference cardinality is 10000, and the delete _ratio is 0.2, use HalfXor to estimate the intersection cardinality:
 
 ```
-python main.py --method GMOD --intersection 100000 --difference 10000 --delete _ratio 0.2
+python main.py --method HX --intersection 100000 --difference 10000 --delete _ratio 0.2
 ```
 
 When the intersection cardinality is 100000 and the difference cardinality is 10000 in the streaming case, use SFM to estimate the intersection cardinality:
@@ -109,16 +109,4 @@ Use CascadingLegions to estimate the intersection cardinality:
 
 ```
 python main.py --method CL --intersection 1000000 --difference 100000
-```
-
-Use HalfXor to estimate the intersection cardinality:
-
-```
-python main.py --method HX --intersection 1000000 --difference 100000
-```
-
-Use Counting HyperLogLog to estimate the intersection cardinality:
-
-```Use LiquidLegions to estimate the intersection cardinality:
-python main.py --method CHLL --intersection 1000000 --difference 100000
 ```
