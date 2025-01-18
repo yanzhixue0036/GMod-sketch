@@ -34,7 +34,7 @@ https://archive.ics.uci.edu/dataset/526/bitcoinheistransomwareaddressdataset
 |    HX    |          the HalfXor sketch           |           |
 |   CHLL   |    the Counting HyperLogLog sketch    |           |
 
-We evaluate the performance of the night methods mentioned above in estimating cardinality for fully dynamic scenarios in [`main.py`](https://github.com/yanzhixue0036/SetXorDyn/blob/main/main_static.py). Among them, HLL and FM do not incorporate privacy protection mechanisms. You can execute [`main.py`](https://github.com/yanzhixue0036/SetXorDyn/blob/main/main_static.py) with the following parameters:
+We evaluate the performance of the night methods mentioned above in estimating cardinality for fully dynamic scenarios in [`main.py`](./main.py). Among them, HLL and FM do not incorporate privacy protection mechanisms. You can execute [`main.py`](./main.py) with the following parameters:
 
 | Parameters        | Description                                              |
 | ----------------- | -------------------------------------------------------- |
