@@ -24,15 +24,13 @@ https://archive.ics.uci.edu/dataset/526/bitcoinheistransomwareaddressdataset
 
 |  Method  |              Description              | Reference |
 | :------: | :-----------------------------------: | :-------: |
-|   GMod   |     our novel sketch method GMod      |           |
-| GMod-MEC | GMod with multiple estimator combined |           |
-|   SFM    |         the Sketch-Flip-Merge         |           |
-|   HLL    |        the HyperLogLog sketch         |           |
-|    FM    |      the Flajolet-Martin sketch       |           |
-|    CL    |      the CascadingLegions sketch      |           |
-|    LL    |       the LiquidLegions sketch        |           |
-|    HX    |          the HalfXor sketch           |           |
-|   CHLL   |    the Counting HyperLogLog sketch    |           |
+|   GMod   |     our novel sketch method GMod      |     [GMod.py](./GMod.py)      |
+| GMod-MEC | GMod with multiple estimator combined |    [GMod.py](./GMod.py)       |
+|   [SFM](https://proceedings.mlr.press/v202/hehir23a.html)    |         the Sketch-Flip-Merge         |      [sfm.py](./baseline/sfm.py)     |
+|    [CL](https://research.google/pubs/privacy-preserving-secure-cardinality-and-frequency-estimation/)    |      the CascadingLegions sketch      |      [cl.py](./baseline/cl.py)     |
+|    [LL](https://research.google/pubs/privacy-preserving-secure-cardinality-and-frequency-estimation/)    |       the LiquidLegions sketch        |     [ll.py](./baseline/ll.py)      |
+|    [HX](https://ieeexplore.ieee.org/abstract/document/10416381)    |          the HalfXor sketch           |     [hx.py](./baseline/hx.py)      |
+|   [CHLL](https://www.cidrdb.org/cidr2019/papers/p23-freitag-cidr19.pdf)   |    the Counting HyperLogLog sketch    |    [chll.py](./baseline/chll.py)       |
 
 We evaluate the performance of the night methods mentioned above in estimating cardinality for fully dynamic scenarios in [`main.py`](./main.py). Among them, HLL and FM do not incorporate privacy protection mechanisms. You can execute [`main.py`](./main.py) with the following parameters:
 
