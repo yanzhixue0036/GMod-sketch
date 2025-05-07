@@ -61,6 +61,7 @@ def compute_aare(lst, true_cardi):
 def compute_rrmse(results, true_cardi):
     sum = 0
     neg_count = 0
+    if results == []: return 1.0
     for i in range(len(results)):
         # if results[i] < 0:
         #     neg_count += 1

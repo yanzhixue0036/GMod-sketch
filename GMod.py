@@ -13,7 +13,7 @@ from math import exp, pow, log
 class GMod:
     def __init__(self, dict_dataset, m, w, g, output,seed, epsilon=1, random_response=False, delete_dataset=None):
         self.dict_dataset = dict_dataset
-        self.m_size = m
+        self.m_size = int(m)
         self.w_size = w
         self.g = g
         self.G = 2**self.g
@@ -29,7 +29,8 @@ class GMod:
                 self.delete_dataset[user] = {}
                 self.delete_dataset[user]['elements']=[]
         else:
-            self.delete_dataset = delete_dataset       
+            self.delete_dataset = delete_dataset    
+        self.f = lambda x: 8 * self.G if x == 0 and not random_response else self.G   
         #self.repeatTimes = 1 if delete_dataset==None else 10
         self.repeatTimes = 1
         self.key = dict()
@@ -42,14 +43,15 @@ class GMod:
             # i ← h(e)
             temp_i = bin(temp_hash[1])[2:]
             index_i = int(temp_i, 2) % self.m_size
+            G = self.f(index_j)
             
-            temp_x_pair = [item, row]   # 修改了这行代码
+            temp_x_pair = [item, row] 
             temp_x = mmh3.hash(str(temp_x_pair), signed=False, seed=self.seed + 3)
             temp_x = bin(temp_x)[2:]
-            x = int(temp_x, 2) % self.G
+            x = int(temp_x, 2) % G
             
             GMod_sketch[index_i][index_j] += add * x
-            GMod_sketch[index_i][index_j] %= self.G
+            GMod_sketch[index_i][index_j] %= G
             #if(add == 1): row[0] += 1
 
     def build_sketch(self):
@@ -77,12 +79,17 @@ class GMod:
                     #repeattimes = user_dict['repeattimes'][i]  
                     row[0] = delete_dict['index'][i]        
                     self.__arriveElement(item, row, repeattimes, GMod_sketch, add=-1)
-
+            self.dict_GMod_sketch[user] = GMod_sketch
+            
             # pertube
             if self.random_response:
                 GMod_sketch = self.perturbsketch(GMod_sketch)
+                self.dict_GMod_sketch[user] = GMod_sketch
+            else:
+                self.dict_GMod_sketch['A'] = GMod_sketch
+                break
 
-            self.dict_GMod_sketch[user] = GMod_sketch
+            
 
     def poisson(self, u):
         x = 0
@@ -188,19 +195,19 @@ class GMod:
             n=mid
         return n
     def estimate_n(self, merge_sketch, m, w, alpha):
+        G = self.G
+        w = self.w_size
+        m = self.m_size
+        gamma = 0.5772156649
         
         v = 0.0 
         for j in range(w):
             count = 0
             for i in range(self.m_size):
-                count += (merge_sketch[i][j] == 0)
+                count += (merge_sketch[i][j] % G == 0)
             v += count / self.m_size
         V = v / self.w_size
         
-        G = self.G
-        w = self.w_size
-        m = self.m_size
-        gamma = 0.5772156649
         
         a, b = math.sqrt(2), 0.5 
         f = lambda n: (
@@ -226,7 +233,7 @@ class GMod:
         n_f = 0
         denomi = 0
         for j in range(w):
-            G = self.G
+            G = self.f(j)
             m = self.m_size
             
             z = 0
@@ -274,7 +281,7 @@ class GMod:
             # lst_B = self.dict_dataset[user_B]
 
             GMod_sketch_A = self.dict_GMod_sketch['A']
-            GMod_sketch_B = self.dict_GMod_sketch['B']
+            # GMod_sketch_B = self.dict_GMod_sketch['B']
 
             # estimated_union = self.binary_search_estimator(GMod_sketch_A, self.m_size, self.w_size, self.alpha)
             estimated_union = self.estimate_n(GMod_sketch_A, self.m_size, self.w_size, self.alpha)
@@ -305,7 +312,7 @@ class GMod:
             # lst_B = self.dict_dataset[user_B]
 
             GMod_sketch_A = self.dict_GMod_sketch['A']
-            GMod_sketch_B = self.dict_GMod_sketch['B']
+            # GMod_sketch_B = self.dict_GMod_sketch['B']
             
             # estimated_union = self.binary_search_estimator(GMod_sketch_A, self.m_size, self.w_size, self.alpha)
             estimated_union = self.estimate_n(GMod_sketch_A, self.m_size, self.w_size, self.alpha)
@@ -321,6 +328,7 @@ class GMod:
     def add_lap_noise(self, data):
         lap_noise = np.random.laplace(0, 1, len(data))
         return lap_noise + data
+    
     def estimate_union(self):
         random.seed(self.seed)
 

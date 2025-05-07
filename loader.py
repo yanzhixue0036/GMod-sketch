@@ -210,7 +210,7 @@ class Dataloader:
         if dataset == 'synthetic':
             dict_dataset = self.generate_synthetic_dataset()
             self.dict_dateset = dict_dataset
-            with open("output2.json", "w") as json_file:
+            with open("./tmp/output2.json", "w") as json_file:
                 json.dump(dict_dataset, json_file, indent=4)
             # dict_dataset = self.generate_single_dataset()
         elif dataset == 'deleted':
@@ -235,6 +235,6 @@ class Dataloader:
         dict_B = dict_dataset['B']
         for item in dict_B:
             dict_B[item] = dict_B[item][0:deleted_c] + dict_B[item][self.intersection: self.intersection+deleted_d_B]
-        with open("output.json", "w") as json_file:
+        with open("./tmp/output.json", "w") as json_file:
             json.dump(dict_dataset, json_file, indent=4)
         return dict_dataset

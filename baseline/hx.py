@@ -26,7 +26,7 @@ class HalfXor(object):
 
     '''
     __slots__ = ("dict_dataset", "delete_ratio", "repeatTimes",\
-        "m", "w", "lamb", "B", "D", "hashfunc", "hash_range_bit", "seed","delete_dataset")
+        "m", "w", "lamb", "B", "D", "hashfunc", "hashfunc_64", "hash_range_bit", "seed","delete_dataset")
 
     def __init__(
         self,
@@ -37,6 +37,7 @@ class HalfXor(object):
         seed = random.randint(1, 2**32-1),
         delete_dataset=None,
         hashfunc: Callable = mmh3_hash32,
+        hashfunc_64: Callable = mmh3_hash64,
         hash_range_bit  = 32
     ):
         self.dict_dataset = dict_dataset
@@ -46,6 +47,7 @@ class HalfXor(object):
         self.B=np.zeros((m,w),dtype=np.bool_)
         self.D=np.zeros(m)
         self.hashfunc = hashfunc
+        self.hashfunc_64 = hashfunc_64
         self.hash_range_bit = hash_range_bit
         
         self.seed = seed
@@ -95,8 +97,9 @@ class HalfXor(object):
         w=self.w
         #print(h_i)
         binary_item=bin(h_i)[2:].zfill(32)
+        rvs_binary_item = binary_item[::-1]
         j = 0
-        for bit in binary_item:
+        for bit in rvs_binary_item:
             if bit == '0' and j < w:
                 j += 1
             else:
@@ -120,11 +123,17 @@ class HalfXor(object):
                 self.B[i][j]= self.B[i][j] ^ x_irk
                      
     def _update_B_3(self,e,r):
-        hv = self.hashfunc(e, seed=self.seed-2)
-        i= hv & (self.m - 1)
-        bits = hv >> int(log(self.m,2))
+        hv = self.hashfunc_64(e, seed=self.seed-2)
+        
+        tmp_i = bin(hv[1])[2:]
+        i= int(tmp_i, 2) & (self.m - 1)
+        # bits = hv >> int(log(self.m,2))
         x_ir1=self.h(i,r,1)
-        j=self.row(self.h_i(i,e,1))
+        
+        # j=self.row(self.h_i(i,e,1))
+        # tmp_j = bin(hv[0])[2:]
+        j=self.row(hv[0])
+        # print(i, hv[0], j, x_ir1)
         self.B[i][j]= self.B[i][j] ^ x_ir1
     
 
@@ -157,13 +166,18 @@ class HalfXor(object):
             user_dict = self.dict_dataset[user]
             for i in range(len(user_dict['elements'])):
                 repeattimes = user_dict['repeattimes'][i]
-                item = user_dict['elements'][i]                
-                self.insert(item, user_dict['index'][i])
+                for r in range(repeattimes):
+                    item = user_dict['elements'][i]                
+                    self.insert(item, user_dict['index'][i]+r)
                 #row+=1
             #delete
             user_dict = self.delete_dataset[user]
             for i in range(len(user_dict['elements'])):
-                self.delete(user_dict['elements'][i],user_dict['index'][i])
+                repeattimes = user_dict['repeattimes'][i]
+                for r in range(repeattimes):
+                    item = user_dict['elements'][i]   
+                    self.delete(user_dict['elements'][i],user_dict['index'][i]+r)
+            break
                 
     def p_j(self,j):
         w=self.w
@@ -215,11 +229,11 @@ class HalfXor(object):
         
         phi_func_fixed = lambda n: self.phi_func(n) - v
         
-        output=binary_search(phi_func_fixed,1,1e9,1)
+        output=binary_search(phi_func_fixed,1,1e10,1)
         # print("e1=",output)
         return output
 
-    def IVW_estimate(self):
+    def imp_estimate(self):
         n_est=self.binary_search_estimate()
         lamb=self.lamb
         B = self.B
@@ -276,22 +290,23 @@ class HalfXor(object):
             n_d_est=-m*log(u)
             return n_d_est
 
+    # def count(self):
+    #     m=self.m
+    #     n_b_est=self.binary_search_estimate()
+    #     n_d_est=self.D_estimate()
+        
+    #     if n_b_est > 3*m:
+    #         return [n_b_est]
+    #     else:
+    #         return [n_d_est]
+
     def count(self):
         m=self.m
-        n_b_est=self.binary_search_estimate()
+        n_b_est=self.imp_estimate()
         n_d_est=self.D_estimate()
-        
+        # print(n_b_est, n_d_est)
         if n_b_est > 3*m:
             return [n_b_est]
         else:
             return [n_d_est]
-    
-    def count_IVW(self):
-        m=self.m
-        n_b_est=self.IVW_estimate()
-        n_d_est=self.D_estimate()
-        
-        if n_b_est > 3*m:
-            return [n_b_est]
-        else:
-            return [n_d_est]
+

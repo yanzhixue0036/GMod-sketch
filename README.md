@@ -78,36 +78,36 @@ pip install -r requirements.txt
 
 Use `main.py` to test a method for the Single Set Case where cardinality is 100000, use GMOD-MEC to estimate the cardinality:
 ```
-python3 main.py --method GMOD_MEC --intersection 100000 --difference 0 --noise False
+python3 main.py --method GMOD_MEC --intersection 100000 --difference 0
 ```
 
 
-In the Multiple Set Case, when the intersection cardinality is 100000 and the difference cardinality is 10000, use GMOD-MEC to estimate the intersection cardinality:
+In the Multiple Set Case, when the intersection cardinality is 10000 and the difference cardinality is 100000, use GMOD-MEC to estimate the intersection cardinality:
 
 ```
-python3 main.py --method GMOD_MEC --intersection 100000 --difference 10000 --noise True
+python3 main.py --method GMOD_MEC --intersection 10000 --difference 100000 --noise
 ```
 
-When the intersection cardinality is 100000 and the difference cardinality is 10000 , use GMOD_MEC to estimate the intersection cardinality with a privacy budget of 2:
+When the intersection cardinality is 10000 and the difference cardinality is 100000, use GMOD_MEC to estimate the intersection cardinality with a privacy budget of 2:
 
 ```
-python main.py --method GMOD_MEC --intersection 100000 --difference 10000 --noise True --epsilon 2
+python main.py --method GMOD_MEC --intersection 10000 --difference 100000 --noise --epsilon 2
 ```
 
-When the intersection cardinality is 100000, the difference cardinality is 10000, and the delete _ratio is 0.2, use HalfXor to estimate the intersection cardinality:
+When the cardinality is 100000, and the delete _ratio is 0.2, use HalfXor to estimate the cardinality:
 
 ```
-python main.py --method HX --intersection 100000 --difference 10000 --delete _ratio 0.2
+python main.py --method HX --intersection 100000 --difference 0 --delete_ratio 0.2
 ```
 
 When the intersection cardinality is 100000 and the difference cardinality is 10000 in the streaming case, use SFM to estimate the intersection cardinality:
 
 ```
-python main.py --method SFM --intersection 100000 --difference 10000 --merge_method deterministic
+python main.py --method SFM --intersection 10000 --difference 100000 --merge_method deterministic
 ```
 
 Use CascadingLegions to estimate the intersection cardinality:
 
 ```
-python main.py --method CL --intersection 1000000 --difference 100000
+python main.py --method CL --intersection 10000 --difference 100000
 ```

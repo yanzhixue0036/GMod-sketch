@@ -66,7 +66,7 @@ class CHLL(object):
     '''
     
     __slots__ = ("dict_dataset", "delete_dataset","repeatTimes",\
-        "p", "w" ,"m", "reg", "alpha", "max_rank", "hashfunc", "hash_range_bit", "seed")
+        "p", "w" ,"m", "reg", "alpha", "max_rank", "hashfunc", "hashfunc_64", "hash_range_bit", "seed")
 
     # HACK
     # The range of the hash values used for HyperLogLog
@@ -91,6 +91,7 @@ class CHLL(object):
         seed: int = random.randint(1, 2**32-1),
         delete_dataset = None,
         hashfunc: Callable = mmh3_hash32,
+        hashfunc_64: Callable = mmh3_hash64,
         hash_range_bit: int = 32 
     ):
         self.p = p
@@ -126,6 +127,7 @@ class CHLL(object):
         if not callable(hashfunc):
             raise ValueError("The hashfunc must be a callable.")
         self.hashfunc = hashfunc
+        self.hashfunc_64 = hashfunc_64
         
         # Common settings
         self.alpha = self._get_alpha(self.p)
@@ -181,26 +183,26 @@ class CHLL(object):
         """
         b = str(b).encode('utf-8')
         # Digest the hash object to get the hash value
-        hv = self.hashfunc(b, seed=self.seed)
+        hv = self.hashfunc_64(b, seed=self.seed)
         # Get the index of the register using the first p bits of the hash
-        reg_index = hv & (self.m - 1)
+        reg_index = hv[0] & (self.m - 1)
         # Get the rest of the hash
-        bits = self.hashfunc(b, seed=self.seed+1)
+        # bits = self.hashfunc(b, seed=self.seed+1)
         # Update the register
-        self.reg[reg_index, self._get_rank(bits)].increment(b)
+        self.reg[reg_index, self._get_rank(hv[1] & (2**self.w - 1))].increment(b)
 
 
     def delete(self, b) -> None:
         b = str(b).encode('utf-8')
         # Digest the hash object to get the hash value
-        hv = self.hashfunc(b, seed=self.seed)
+        hv = self.hashfunc_64(b, seed=self.seed)
         # Get the index of the register using the first p bits of the hash
-        reg_index = hv & (self.m - 1)
+        reg_index = hv[0] & (self.m - 1)
         # Get the rest of the hash
-        bits = self.hashfunc(b, seed=self.seed+1)
+        # bits = self.hashfunc(b, seed=self.seed+1)
         
         # Update the register
-        self.reg[reg_index, self._get_rank(bits)].decrement(b)
+        self.reg[reg_index, self._get_rank(hv[1] & (2**self.w - 1))].decrement(b)
         
     def build_sketch(self):
         
@@ -210,13 +212,17 @@ class CHLL(object):
             user_dict = self.dict_dataset[user]
             for i in range(len(user_dict['elements'])):
                 repeattimes = user_dict['repeattimes'][i]
-                item = user_dict['elements'][i]                
-                self.insert(item)
+                for r in range(repeattimes):
+                    item = user_dict['elements'][i]                
+                    self.insert(item)
             #delete
             user_dict = self.delete_dataset[user]
             for i in range(len(user_dict['elements'])):
-                item = user_dict['elements'][i]                
-                self.delete(item)
+                for r in range(repeattimes):
+                    item = user_dict['elements'][i]                
+                    self.delete(item)
+                    
+            break
                 
     def _linearcounting(self, num_zero):
         return self.m * np.log(self.m / float(num_zero))
