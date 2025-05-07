@@ -200,7 +200,7 @@ class Dataloader:
             if not i == len(lst_B)-1:
                 dict_B['index'][i+1] = dict_B['index'][i] + dict_B['repeattimes'][i]
 
-        # 关闭文件
+        
         csvfile.close()
         # print("finish...........................................")
         return dict_dataset
