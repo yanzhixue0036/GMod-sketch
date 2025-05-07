@@ -64,10 +64,13 @@ We evaluate the performance of the night methods mentioned above in estimating c
 | --chll_w          | w of chll                                                |
 
 ### Quickstart
+**Note:** This project requires **Python 3.8**. Please make sure Python 3.8 is installed before proceeding.
 To quickly set up a virtual environment and install the required dependencies, run:
 ```
-python3 -m venv env
+python3.8 -m venv env
 source env/bin/activate
+pip install numpy==1.21.6
+pip install scipy==1.10.1
 pip install -r requirements.txt
 ```
 
