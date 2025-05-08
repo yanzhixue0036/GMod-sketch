@@ -8,13 +8,16 @@ This repository provides our implementation of GMod, a fully dynamic sketch desi
 
 Our experiments encompass both synthetic datasets and real-world datasets. For the synthetic datasets, we start by selecting $𝑛$ unique integers from the 64-bit integer space. Then they are each duplicated  randomly. For the real-world datasets, evaluation uses TPC-DS for single sets and BitcoinHeist for multiple sets. TPC-DS models decision-support tasks, while BitcoinHeist covers ransomware-related transactions.
 
-For the TPC-DS dataset, we build sketches that summarize the relevant decision-support data, which can be obtained through:
+For the real-world datasets, we use TPC-DS and BitcoinHeist, with links provided below. TPC-DS models decision-support scenarios, while BitcoinHeist captures ransomware-related Bitcoin transactions.
+
+For the TPC-DS dataset, we perform cardinality estimation on all columns across all 24 tables in the TPC-DS benchmark. Specifically, for each column, we treat the values as input to build a sketch and estimate the number of distinct elements. The dataset and schema are publicly available at:
 
 ```
 https://www.tpc.org/default5.asp
 ```
 
-And for the BitcoinHeist dataset, we construct sketches to record the Bitcoin transaction records, which can be obtained through:
+To simulate the multiple-set scenario, we randomly sample records from the BitcoinHeist dataset to form two subsets, which may be disjoint or overlapping. For each subset, we construct a separate sketch, inject noise according to the privacy mechanism, and then merge them to estimate the cardinality of their union. The union size ranges from $2^{15}$ to $2^{20}$, depending on the specific samples drawn. The size of the symmetric difference is not fixed and naturally varies with the degree of overlap introduced during sampling.
+The dataset is available at:
 
 ```
 https://archive.ics.uci.edu/dataset/526/bitcoinheistransomwareaddressdataset
