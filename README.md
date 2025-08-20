@@ -1,4 +1,4 @@
-
+<meta name="robots" content="noindex">
 # ✨ GMod: A Fast, Mergable, and LDP-Compatible Sketch for Counting Distinct Values in Fully Dynamic Tables  
 
 [![Conference](https://img.shields.io/badge/Accepted-SIGMOD%202026-2ea44f?style=flat&logo=acm&logoColor=white)](https://sigmod.org) 
