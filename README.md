@@ -1,5 +1,3 @@
-<meta name="robots" content="noindex">
-
 # GMod: A Fast, Mergable, and LDP Compatible Sketch for Counting the Number of Distinct Values in Fully Dynamic Tables
 
 This repository provides our implementation of GMod, a fully dynamic sketch designed for privacy-preserving NDV estimation. GMod efficiently supports insertions and deletions and also incorporates sketch perturbation under Local Differential Privacy (LDP), achieving high accuracy with minimal overhead. Extensive experiments confirm GMod’s superior performance and memory efficiency compared to existing methods. 
