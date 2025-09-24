@@ -1,5 +1,3 @@
-<meta name="robots" content="noindex">
-
 # ✨ GMod: A Fast, Mergable, and LDP-Compatible Sketch for Counting Distinct Values in Fully Dynamic Tables  
 
 [![Conference](https://img.shields.io/badge/Accepted-SIGMOD%202026-2ea44f?style=flat&logo=acm&logoColor=white)](https://sigmod.org) 
@@ -10,7 +8,8 @@
 
 ---
 
-🚀 **GMod** is a fully dynamic sketch designed for **privacy-preserving NDV estimation**.  
+🚀 **GMod** is a fully dynamic sketch designed for **privacy-preserving NDV estimation** ([PaperLink](https://dl.acm.org/doi/10.1145/3749157)).
+This framework simultaneously tracks dynamic local cardinalities and enables private union cardinality estimation.
 It supports **insertions + deletions**, **merging**, and **Local Differential Privacy (LDP)** with:  
 
 - ⚡ **High accuracy**  
